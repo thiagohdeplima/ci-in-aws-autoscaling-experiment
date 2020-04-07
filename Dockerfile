@@ -16,9 +16,9 @@ RUN wget -O /tmp/terraform.zip ${URL} \
     && unzip /tmp/terraform.zip -d /tmp \
     && mv /tmp/terraform /usr/bin
 
-RUN apt install -yq \
+RUN apt-get install -yq \
     python3-pip
 
 RUN pip3 install awscli
 
-RUN apt clean -yq
+RUN apt-get clean -yq
