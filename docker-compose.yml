@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  terraform:
+    environment:
+      AWS_ACCESS_KEY_ID: ${SEMANTIX_AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${SEMANTIX_AWS_SECRET_ACCESS_KEY}
+      TERRAFORM_API_TOKEN: ${SEMANTIX_TERRAFORM_API_TOKEN}
+    build:
+      context: '.'
+    volumes:
+    - ".:/srv/app"
+    command: "tail -f /dev/null"
