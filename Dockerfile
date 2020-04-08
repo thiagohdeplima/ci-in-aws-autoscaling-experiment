@@ -10,7 +10,8 @@ RUN apt-get update
 
 RUN apt-get -yq install \
     unzip \
-    wget
+    wget \
+    groff
 
 RUN wget -O /tmp/terraform.zip ${URL} \
     && unzip /tmp/terraform.zip -d /tmp \
