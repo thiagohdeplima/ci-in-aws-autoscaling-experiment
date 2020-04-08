@@ -22,3 +22,5 @@ RUN apt-get install -yq \
 RUN pip3 install awscli
 
 RUN apt-get clean -yq
+
+RUN terraform init
