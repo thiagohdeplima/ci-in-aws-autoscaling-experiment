@@ -40,3 +40,16 @@ Feito isto, declare as seguintes variáveis de ambiente:
 
 - `TERRAFORM_AWS_ACCESS_KEY_ID`
 - `TERRAFORM_AWS_SECRET_ACCESS_KEY`
+
+### Executando isto
+
+Para garantir reprodutividade deste ambiente em qualquer máquina, foi utiliza Docker para o Terraform, mesmo em ambiente local.
+
+Assim, para subir o mesmo, basta executar:
+
+`docker-compose up -d`
+
+
+Feito isto, para interagir com o terraform, basta acessar o container:
+
+`docker-compose exec terraform bash`
