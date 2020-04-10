@@ -65,13 +65,13 @@ resource "random_shuffle" "subnet_id" {
 }
 
 resource "aws_key_pair" "ssh_ci_key" {
-  key_name   = "ci"
+  key_name   = "${var.ssh_key_name}"
   public_key = "${var.ssh_pub_key}"
 }
 
 resource "aws_launch_template" "template" {
   name_prefix   = "ci_server"
-  key_name      = "ssh_ci_key"
+  key_name      = "${var.ssh_key_name}"
   instance_type = "${var.instance_type}"
   image_id      = "${data.aws_ami.ubuntu.id}"
 
