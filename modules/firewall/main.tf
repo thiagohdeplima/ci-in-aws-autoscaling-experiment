@@ -1,3 +1,15 @@
+terraform {
+  backend "s3" {
+    region = "us-east-2"
+    bucket = "codebrain-terraform"
+    key    = "firewall/terraform.tfstate"
+  }
+  
+  required_providers {
+    aws = ">= 2.14.0"
+  }
+}
+
 provider "aws" {
   region  = "${var.aws_region}"
   profile = "${var.aws_profile}"
