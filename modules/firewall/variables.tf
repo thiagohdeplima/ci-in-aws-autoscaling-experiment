@@ -1,7 +1,3 @@
-variable "vpc_id" {
-  type = "string"
-}
-
 variable "aws_region" {
   type    = "string"
   default = "us-east-2"
@@ -14,7 +10,7 @@ variable "aws_profile" {
 
 variable "environment" {
   type    = "string"
-  default = "CICD"
+  default = "management"
 }
 
 variable "groups" {

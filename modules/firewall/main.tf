@@ -3,11 +3,17 @@ provider "aws" {
   profile = "${var.aws_profile}"
 }
 
+data "aws_vpcs" "main" {
+  tags = {
+    Env = "${var.environment}"
+  }
+}
+
 resource "aws_security_group" "this" {
   for_each = "${var.groups}"
 
   name        = "${each.key}"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = "${tolist(data.aws_vpcs.main.ids)[0]}"
   description = "${each.key} security group"
 
   ingress {
