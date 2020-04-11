@@ -30,6 +30,15 @@ data "aws_subnet_ids" "ci_subnets" {
   }
 }
 
+data "aws_subnet_ids" "nfs_subnets" {
+  vpc_id = "${tolist(data.aws_vpcs.main.ids)[0]}"
+
+  tags = {
+    Name = "NFS"
+    Env = "${var.environment}"
+  }
+}
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -50,6 +59,18 @@ data "aws_security_groups" "ci_groups" {
   filter {
     name   = "group-name"
     values = ["ssh", "jenkins", "sonarqube"]
+  }
+
+  filter {
+    name   = "vpc-id"
+    values = ["${tolist(data.aws_vpcs.main.ids)[0]}"]
+  }
+}
+
+data "aws_security_groups" "nfs_groups" {
+  filter {
+    name   = "group-name"
+    values = ["nfs"]
   }
 
   filter {
