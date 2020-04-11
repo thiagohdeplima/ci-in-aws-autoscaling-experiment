@@ -21,7 +21,7 @@ data "aws_vpcs" "main" {
   }
 }
 
-data "aws_subnet_ids" "subnets" {
+data "aws_subnet_ids" "ci_subnets" {
   vpc_id = "${tolist(data.aws_vpcs.main.ids)[0]}"
 
   tags = {
@@ -61,7 +61,7 @@ data "aws_security_groups" "groups" {
 resource "random_shuffle" "subnet_id" {
   result_count = 1
 
-  input = "${tolist(data.aws_subnet_ids.subnets.ids)}"
+  input = "${tolist(data.aws_subnet_ids.ci_subnets.ids)}"
 }
 
 resource "aws_key_pair" "ssh_ci_key" {
@@ -101,7 +101,7 @@ resource "aws_autoscaling_group" "ci" {
 
   force_delete = true
 
-  vpc_zone_identifier = "${tolist(data.aws_subnet_ids.subnets.ids)}"
+  vpc_zone_identifier = "${tolist(data.aws_subnet_ids.ci_subnets.ids)}"
 
   health_check_type = "EC2"
   health_check_grace_period = 300
