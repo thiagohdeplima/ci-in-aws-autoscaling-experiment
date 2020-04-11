@@ -70,7 +70,7 @@ resource "aws_key_pair" "ssh_ci_key" {
 }
 
 resource "aws_launch_template" "template" {
-  name_prefix   = "ci_server"
+  name_prefix   = "ci-"
   key_name      = "${var.ssh_key_name}"
   instance_type = "${var.instance_type}"
   image_id      = "${data.aws_ami.ubuntu.id}"
@@ -96,8 +96,8 @@ resource "aws_launch_template" "template" {
 
 resource "aws_autoscaling_group" "ci" {
   name     = "ci"
-  max_size = 1
-  min_size = 1
+  max_size = 0
+  min_size = 0
 
   force_delete = true
 
@@ -112,4 +112,26 @@ resource "aws_autoscaling_group" "ci" {
     id      = "${aws_launch_template.template.id}"
     version = "$Latest"
   }
+}
+
+resource "aws_autoscaling_schedule" "scale_out" {
+  min_size         = 1
+  max_size         = 1
+  desired_capacity = 1
+
+  recurrence = "${var.cron_scale_out}"
+
+  scheduled_action_name  = "scale_out"
+  autoscaling_group_name = "${aws_autoscaling_group.ci.name}"
+}
+
+resource "aws_autoscaling_schedule" "scale_in" {
+  min_size         = 0
+  max_size         = 0
+  desired_capacity = 0
+
+  recurrence = "${var.cron_scale_in}"
+
+  scheduled_action_name  = "scale_in"
+  autoscaling_group_name = "${aws_autoscaling_group.ci.name}"
 }
