@@ -44,3 +44,13 @@ Feito isto, declare as seguintes variáveis de ambiente:
 ## Executando
 
 Após realização de todo passo a passo da sessão anterior, execute `docker-compose up -d` para subir o container do Terraform, e por fim acesse o container utilizando `docker-compose exec terraform bash`.
+
+Para subir uma infraestrutura com este projeto você deve executar os módulos presentes nele na ordem abaixo:
+
+1. [firewall](modules/firewall/)
+2. [networking](modules/networking/)
+3. [server](modules/server/)
+
+Nada impede, no entanto, que com poucas alterações você possa executar eles individualmente, desde que tenha compreendido como eles funcionam e altere o valor de certas variáveis via linha de comando ao executar `terraform apply`.
+
+Lembre-se de ler o `README.md` presente em cada uma destas pastas também.
