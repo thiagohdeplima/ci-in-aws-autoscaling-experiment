@@ -80,6 +80,8 @@ function change_sysctl_params() {
 
   echo "vm.max_map_count=262144" |\
     tee -a /etc/sysctl.d/92-vm.max_map_count.conf
+
+  sysctl -p /etc/sysctl.d/*.conf
 }
 
 function change_limits() {
