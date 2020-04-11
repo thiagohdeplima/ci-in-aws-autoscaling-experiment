@@ -58,7 +58,7 @@ data "aws_security_groups" "ci_groups" {
   }
 }
 
-resource "random_shuffle" "subnet_id" {
+resource "random_shuffle" "ci_subnet_id" {
   result_count = 1
 
   input = "${tolist(data.aws_subnet_ids.ci_subnets.ids)}"
@@ -78,7 +78,7 @@ resource "aws_launch_template" "template" {
   network_interfaces {
     delete_on_termination       = true
     associate_public_ip_address = true
-    subnet_id                   = "${random_shuffle.subnet_id.result[0]}"
+    subnet_id                   = "${random_shuffle.ci_subnet_id.result[0]}"
     security_groups             = "${tolist(data.aws_security_groups.ci_groups.ids)}"
   }
 
