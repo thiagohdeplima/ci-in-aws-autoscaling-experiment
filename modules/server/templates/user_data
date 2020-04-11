@@ -16,6 +16,56 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bi
 apt-get update
 apt-get upgrade -yq
 
-sudo apt-get install -yq \
+apt-get install -yq \
   docker-ce \
   docker-compose
+
+cat <<EOF > /opt/docker-compose.yml
+version: "3"
+
+networks:
+  network: {}
+
+volumes:
+  jenkins:
+  sonarqube:
+  postgresql:
+
+services:
+  sonarqube:
+    networks:
+    - network
+    image: sonarqube:lts
+    restart: always
+    environment:
+      SONARQUBE_JDBC_USERNAME: username
+      SONARQUBE_JDBC_PASSWORD: 1q2w3e4r5t
+      SONARQUBE_JDBC_URL: jdbc:postgresql://database:5432/sonarqube
+    ports:
+    - 9000:9000
+    volumes:
+    - sonarqube:/opt/sonarqube
+
+  database:
+    networks:
+    - network
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_DB: sonarqube
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: 1q2w3e4r5t
+    volumes:
+    - postgresql:/var/lib/postgresql
+
+  jenkins:
+    networks:
+    - network
+    image: jenkins:latest
+    restart: always
+    ports:
+    - 8080:8080
+    - 50000:50000
+    volumes:
+    - jenkins:/var/jenkins_home
+EOF
