@@ -22,6 +22,9 @@ data "aws_availability_zones" "azs" {
 resource "aws_vpc" "this" {
   cidr_block = "${var.network_cidr}"
 
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
   tags = {
     Env  = "${var.environment}"
     Name = "${var.environment}"
