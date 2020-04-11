@@ -22,34 +22,25 @@ Requisitos:
 
 ## Introdução
 
-### Pré-configurações
+Para garantir reprodutividade deste ambiente em qualquer máquina, o ambiente de execução do Terraform foi dockerizado.
 
-Este projeto utiliza o [S3 como backend de estado](https://www.terraform.io/docs/backends/types/s3.html) do Terraform.
+Além disto, para compartilhar o [estado](https://www.terraform.io/docs/state/index.html) do Terraform com quem quer que utilize o projeto, utilizamos o [S3 como backend de estado e DynamoDB como controle de consistência do mesmo](https://www.terraform.io/docs/backends/types/s3.html).
 
-Assim, para cumprir os requisitos necessários para usar este ambiente, siga o passo a passo abaixo em sua conta da AWS;
+Deste modo, ao executar o projeto por favor, tenha certeza que seu usuário [possui as permissões adequadas](https://www.terraform.io/docs/backends/types/s3.html) para tal.
+
+Além disto, caso você ou qualquer um em seu projeto tenha criado infraestrutura utilizando algum recurso aqui, por favor, siga o passo a passo abaixo:
 
 * Crie um bucket de S3 destinado ao armazenamento de estado do Terraform;
 * Habilite o [versionamento dos objetos](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html) do Bucket;
-* Altere a variável `bucket` do arquivo [main.tf](main.tf), para o nome do bucket criado;
+* Altere a variável `bucket` em todos arquivos `main.tf`, para o nome do bucket criado;
 * Crie uma tabela de DynamoDB chamada `terraform-lock`;
   * A chave primária desta tabela deverá chamar-se `LockID`.
-* Crie um usuário na AWS que tenha ao menos as permissões especificadas [aqui](https://www.terraform.io/docs/backends/types/s3.html);
-* Crie credenciais para este usuário e guarde-os em um local seguro.
 
 Feito isto, declare as seguintes variáveis de ambiente:
 
 - `TERRAFORM_AWS_ACCESS_KEY_ID`
 - `TERRAFORM_AWS_SECRET_ACCESS_KEY`
 
-### Executando isto
+## Executando
 
-Para garantir reprodutividade deste ambiente em qualquer máquina, foi utiliza Docker para o Terraform, mesmo em ambiente local.
-
-Assim, para subir o mesmo, basta executar:
-
-`docker-compose up -d`
-
-
-Feito isto, para interagir com o terraform, basta acessar o container:
-
-`docker-compose exec terraform bash`
+Após realização de todo passo a passo da sessão anterior, execute `docker-compose up -d` para subir o container do Terraform, e por fim acesse o container utilizando `docker-compose exec terraform bash`.
