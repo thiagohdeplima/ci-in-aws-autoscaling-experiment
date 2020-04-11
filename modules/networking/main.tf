@@ -55,3 +55,16 @@ resource "aws_subnet" "CI" {
     Env  = "${var.environment}"
   }
 }
+
+resource "aws_subnet" "NFS" {
+  count = "${length(data.aws_availability_zones.azs.names)}"
+
+  vpc_id            = "${aws_vpc.this.id}"
+  availability_zone = "${data.aws_availability_zones.azs.names["${count.index}"]}"
+  cidr_block        = "${var.subnets_cidrs.NFS[count.index]}"
+
+  tags = {
+    Name = "NFS"
+    Env  = "${var.environment}"
+  }
+}
