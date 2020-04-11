@@ -35,7 +35,7 @@ variable "ssh_pub_key" {
 
 variable "cron_scale_in" {
   type        = "string"
-  default     = "0-59 23,0-11 * * *"
+  default     = "0-59 23,0-10 * * *"
   description = "Period to down infraestructure, in UTC time"
 }
 
