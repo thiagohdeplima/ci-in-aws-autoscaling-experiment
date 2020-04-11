@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
 
-apt-get update
+function install_dependencies() {
+  apt-get update
 
-apt-get install -yq \
-  curl \
-  docker-compose \
-  ca-certificates \
-  apt-transport-https \
-  software-properties-common
+  apt-get install -yq \
+    curl \
+    docker-compose \
+    ca-certificates \
+    apt-transport-https \
+    software-properties-common
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
 
-apt-get update
-apt-get upgrade -yq
+  apt-get update
+  apt-get upgrade -yq
 
-apt-get install -yq \
-  docker-ce \
-  docker-compose
+  apt-get install -yq \
+    docker-ce \
+    docker-compose
+}
 
+function create_docker_compose_file() {
 cat <<EOF > /opt/docker-compose.yml
 version: "3"
 
@@ -69,3 +72,33 @@ services:
     volumes:
     - jenkins:/var/jenkins_home
 EOF
+}
+
+function change_limits() {
+  ulimit -u 4096
+  ulimit -n 65536
+}
+
+function change_sysctl_params() {
+  echo "fs.file-max=65536" |\
+    tee -a /etc/sysctl.d/91-fs.file-max.conf
+
+  echo "vm.max_map_count=262144" |\
+    tee -a /etc/sysctl.d/92-vm.max_map_count.conf
+}
+
+function change_limits() {
+  ulimit -u 4096
+  ulimit -n 65536
+}
+
+function up_containers() {
+  create_docker_compose_file
+
+  cd /opt && docker-compose up -d
+}
+
+install_dependencies
+change_sysctl_params
+change_params
+up_containers
