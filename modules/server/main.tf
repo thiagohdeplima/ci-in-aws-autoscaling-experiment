@@ -90,6 +90,23 @@ resource "aws_key_pair" "ssh_ci_key" {
   public_key = "${var.ssh_pub_key}"
 }
 
+resource "aws_efs_file_system" "efs" {
+  creation_token = "ci"
+
+  tags = {
+    Name = "CI"
+    Env  = "${var.environment}"
+  }
+}
+
+resource "aws_efs_mount_target" "mount_point" {
+  count = "${length(data.aws_subnet_ids.nfs_subnets.ids)}"
+
+  file_system_id  = "${aws_efs_file_system.efs.id}"
+  security_groups = "${tolist(data.aws_security_groups.nfs_groups.ids)}"
+  subnet_id       = "${tolist(data.aws_subnet_ids.nfs_subnets.ids)["${count.index}"]}"
+}
+
 resource "aws_launch_template" "template" {
   name_prefix   = "ci-"
   key_name      = "${var.ssh_key_name}"
