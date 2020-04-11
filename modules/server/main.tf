@@ -46,7 +46,7 @@ data "aws_ami" "ubuntu" {
   owners = ["${var.canonical_account_id}"]
 }
 
-data "aws_security_groups" "groups" {
+data "aws_security_groups" "ci_groups" {
   filter {
     name   = "group-name"
     values = ["ssh", "jenkins", "sonarqube"]
@@ -79,7 +79,7 @@ resource "aws_launch_template" "template" {
     delete_on_termination       = true
     associate_public_ip_address = true
     subnet_id                   = "${random_shuffle.subnet_id.result[0]}"
-    security_groups             = "${tolist(data.aws_security_groups.groups.ids)}"
+    security_groups             = "${tolist(data.aws_security_groups.ci_groups.ids)}"
   }
 
   user_data = "${filebase64("${path.module}/templates/user_data")}"
