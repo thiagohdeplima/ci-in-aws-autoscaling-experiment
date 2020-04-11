@@ -126,9 +126,9 @@ resource "aws_autoscaling_schedule" "scale_out" {
 }
 
 resource "aws_autoscaling_schedule" "scale_in" {
-  min_size         = 1
-  max_size         = 1
-  desired_capacity = 1
+  min_size         = 0
+  max_size         = 0
+  desired_capacity = 0
 
   recurrence = "${var.cron_scale_in}"
 
