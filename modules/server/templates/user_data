@@ -74,11 +74,6 @@ services:
 EOF
 }
 
-function change_limits() {
-  ulimit -u 4096
-  ulimit -n 65536
-}
-
 function change_sysctl_params() {
   echo "fs.file-max=65536" |\
     tee -a /etc/sysctl.d/91-fs.file-max.conf
@@ -100,5 +95,5 @@ function up_containers() {
 
 install_dependencies
 change_sysctl_params
-change_params
+change_limits
 up_containers
