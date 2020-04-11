@@ -107,6 +107,14 @@ resource "aws_efs_mount_target" "mount_point" {
   subnet_id       = "${tolist(data.aws_subnet_ids.nfs_subnets.ids)["${count.index}"]}"
 }
 
+data "template_file" "user_data" {
+  template = "${file("${path.module}/templates/user_data")}"
+
+  vars = {
+    nfs_dns = "${aws_efs_file_system.efs.dns_name}"
+  }
+}
+
 resource "aws_launch_template" "template" {
   name_prefix   = "ci-"
   key_name      = "${var.ssh_key_name}"
@@ -120,7 +128,7 @@ resource "aws_launch_template" "template" {
     security_groups             = "${tolist(data.aws_security_groups.ci_groups.ids)}"
   }
 
-  user_data = "${filebase64("${path.module}/templates/user_data")}"
+  user_data = "${base64encode(data.template_file.user_data.rendered)}"
 
   tag_specifications {
     resource_type = "instance"
