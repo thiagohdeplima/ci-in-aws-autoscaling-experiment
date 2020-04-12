@@ -131,7 +131,7 @@ cat <<EOF >> /etc/fstab
 ${nfs_dns}:/ /mnt/nfs nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0
 EOF
 
-  mkdir -p /mnt/nfs/{nexus,sonarqube,postgresql,jenkins}
+  mkdir -p /mnt/nfs/volumes/{nexus,sonarqube,postgresql,jenkins}
   mount -a -t nfs4
 }
 
