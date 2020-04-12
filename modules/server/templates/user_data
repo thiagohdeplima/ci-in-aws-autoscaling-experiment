@@ -81,7 +81,7 @@ services:
   jenkins:
     networks:
     - network
-    image: jenkins:latest
+    image: jenkins/jenkins:lts
     restart: always
     ports:
     - 8080:8080
