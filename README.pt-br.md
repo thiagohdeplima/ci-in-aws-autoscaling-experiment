@@ -1,6 +1,4 @@
-# Testes: Vaga de Engenheiro de Software
-
-Este repositório tem como objetivo cumprir o segundo teste técnico para a vaga de Engenheiro de Software.
+# Teste Semantix
 
 ## Escopo
 
